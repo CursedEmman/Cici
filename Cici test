@@ -1,0 +1,237 @@
+-- Command script by Cici
+
+-- Fly command
+game.Players.PlayerAdded:Connect(function(player)
+    local function fly(player)
+        local character = player.Character
+        if character then
+            local humanoid = character:FindFirstChildOfClass("Humanoid")
+            if humanoid then
+                humanoid.PlatformStand = true
+                local flyScript = Instance.new("LocalScript", humanoid)
+                flyScript.Name = "FlyScript"
+                flyScript.Source = [[
+                    local mouse = game.Players.LocalPlayer:GetMouse()
+                    local function fly()
+                        local character = script.Parent.Parent
+                        local humanoid = character:FindFirstChildOfClass("Humanoid")
+                        if humanoid then
+                            humanoid.PlatformStand = true
+                        end
+                        local bodyVelocity = Instance.new("BodyVelocity", character.PrimaryPart)
+                        bodyVelocity.Velocity = Vector3.new(0, 50, 0)
+                    end
+                    fly()
+                ]]
+            end
+        end
+    end
+
+    player.Chatted:Connect(function(message)
+        if message:lower() == "/fly" then
+            fly(player)
+        end
+    end)
+end)
+
+-- Swim command
+game.Players.PlayerAdded:Connect(function(player)
+    local function swim(player)
+        local character = player.Character
+        if character then
+            local humanoid = character:FindFirstChildOfClass("Humanoid")
+            if humanoid then
+                humanoid.Sit = true
+                humanoid.JumpPower = 0
+                humanoid.WalkSpeed = 10
+                humanoid.Swimming = true
+            end
+        end
+    end
+
+    player.Chatted:Connect(function(message)
+        if message:lower() == "/swim" then
+            swim(player)
+        end
+    end)
+end)
+
+-- TPWalk command
+game.Players.PlayerAdded:Connect(function(player)
+    local function tpWalk(player)
+        local character = player.Character
+        if character then
+            local humanoid = character:FindFirstChildOfClass("Humanoid")
+            if humanoid then
+                humanoid.WalkSpeed = 50
+            end
+        end
+    end
+
+    player.Chatted:Connect(function(message)
+        if message:lower() == "/tpwalk" then
+            tpWalk(player)
+        end
+    end)
+end)
+
+-- TPPlayer command
+game.Players.PlayerAdded:Connect(function(player)
+    local function tpPlayer(player, targetPlayer)
+        local character = player.Character
+        local targetCharacter = targetPlayer.Character
+        if character and targetCharacter then
+            local humanoid = character:FindFirstChildOfClass("Humanoid")
+            local targetHumanoid = targetCharacter:FindFirstChildOfClass("Humanoid")
+            if humanoid and targetHumanoid then
+                humanoid.Teleport:FireServer(targetHumanoid.RootPart.Position)
+            end
+        end
+    end
+
+    player.Chatted:Connect(function(message)
+        local splitMessage = message:split(" ")
+        if splitMessage[1]:lower() == "/tpplayer" then
+            local targetPlayer = game.Players:FindFirstChild(splitMessage[2])
+            if targetPlayer then
+                tpPlayer(player, targetPlayer)
+            end
+        end
+    end)
+end)
+
+-- HeadSit command
+game.Players.PlayerAdded:Connect(function(player)
+    local function headSit(player)
+        local character = player.Character
+        if character then
+            local humanoid = character:FindFirstChildOfClass("Humanoid")
+            if humanoid then
+                humanoid.Sit = true
+                humanoid.JumpPower = 0
+                humanoid.WalkSpeed = 0
+            end
+        end
+    end
+
+    player.Chatted:Connect(function(message)
+        if message:lower() == "/headsit" then
+            headSit(player)
+        end
+    end)
+end)
+
+-- Spin command
+game.Players.PlayerAdded:Connect(function(player)
+    local function spin(player)
+        local character = player.Character
+        if character then
+            local humanoid = character:FindFirstChildOfClass("Humanoid")
+            if humanoid then
+                humanoid.Sit = true
+                humanoid.JumpPower = 0
+                humanoid.WalkSpeed = 0
+                local spinScript = Instance.new("LocalScript", humanoid)
+                spinScript.Name = "SpinScript"
+                spinScript.Source = [[
+                    local character = script.Parent.Parent
+                    local torso = character:WaitForChild("Torso")
+                    while true do
+                        torso.CFrame = torso.CFrame * CFrame.Angles(0, math.rad(5), 0)
+                        wait()
+                    end
+                ]]
+            end
+        end
+    end
+
+    player.Chatted:Connect(function(message)
+        if message:lower() == "/spin" then
+            spin(player)
+        end
+    end)
+end)
+
+-- Fling command
+game.Players.PlayerAdded:Connect(function(player)
+    local function fling(player)
+        local character = player.Character
+        if character then
+            local humanoid = character:FindFirstChildOfClass("Humanoid")
+            if humanoid then
+                humanoid.Sit = true
+                humanoid.JumpPower = 0
+                humanoid.WalkSpeed = 0
+                local bodyVelocity = Instance.new("BodyVelocity", humanoid.RootPart)
+                bodyVelocity.Velocity = Vector3.new(0, 100, 0)
+                wait(0.1)
+                bodyVelocity:Destroy()
+            end
+        end
+    end
+
+    player.Chatted:Connect(function(message)
+        if message:lower() == "/fling" then
+            fling(player)
+        end
+    end)
+end)
+
+-- Spectate command
+game.Players.PlayerAdded:Connect(function(player)
+    local function spectate(player, targetPlayer)
+        local character = player.Character
+        local targetCharacter = targetPlayer.Character
+        if character and targetCharacter then
+            local humanoid = character:FindFirstChildOfClass("Humanoid")
+            if humanoid then
+                humanoid.Sit = true
+                humanoid.JumpPower = 0
+                humanoid.WalkSpeed = 0
+                local camera = game.Workspace.CurrentCamera
+                camera.CameraSubject = targetCharacter:FindFirstChildOfClass("Humanoid")
+            end
+        end
+    end
+
+    player.Chatted:Connect(function(message)
+        local splitMessage = message:split(" ")
+        if splitMessage[1]:lower() == "/spectate" then
+            local targetPlayer = game.Players:FindFirstChild(splitMessage[2])
+            if targetPlayer then
+                spectate(player, targetPlayer)
+            end
+        end
+    end)
+end)
+
+-- Day command
+game.Players.PlayerAdded:Connect(function(player)
+    local function day()
+        local lighting = game:GetService("Lighting")
+        lighting.ClockTime = 12
+    end
+
+    player.Chatted:Connect(function(message)
+        if message:lower() == "/day" then
+            day()
+        end
+    end)
+end)
+
+-- Night command
+game.Players.PlayerAdded:Connect(function(player)
+    local function night()
+        local lighting = game:GetService("Lighting")
+        lighting.ClockTime = 0
+    end
+
+    player.Chatted:Connect(function(message)
+        if message:lower() == "/night" then
+            night()
+        end
+    end)
+end)
+
+-- NoFog command
+game
